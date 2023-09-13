@@ -28,6 +28,27 @@ app.post("/create", async (req, res) => {
   res.json({ message: "I am listening to create!" });
 });
 
+app.patch("/:noteId", async (req, res) => {
+  const { noteId } = req.params;
+  // const note = await Note.findById(noteId);
+  // if (!note) return res.json({ error: "Note not found!" });
+
+  const { title, description } = req.body as IncomingBody;
+  // if (title) note.title = title;
+  // if (description) note.description = description;
+
+  const notes = await note.findByIdAndUpdate(
+    noteId,
+    { title, description },
+    { new: true }
+  );
+  if (!notes) return res.json({ error: "Note not found!" });
+
+  await notes.save();
+
+  res.json({ notes });
+});
+
 // listen to some port
 app.listen(3000, () => {
   console.log("Hello world");
