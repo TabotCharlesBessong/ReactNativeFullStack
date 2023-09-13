@@ -1,4 +1,5 @@
 import express from "express";
+import './db'
 
 // create a server
 const app = express();
