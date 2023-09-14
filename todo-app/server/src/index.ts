@@ -1,6 +1,7 @@
 import express from "express";
 import "./db";
 import note from "./model/note";
+import { create, getAll, getOne, remove, update } from "./controller/note";
 
 // create a server
 const app = express();
@@ -19,56 +20,15 @@ app.post("/", (req, res) => {
   console.log(req.body);
 });
 
-app.post("/create", async (req, res) => {
-  const newNote = new note({
-    title: req.body.title as IncomingBody,
-    description: req.body.description as IncomingBody,
-  });
-  await newNote.save();
-  res.json({ message: "I am listening to create!" });
-});
+app.post("/create", create);
 
-app.patch("/:noteId", async (req, res) => {
-  const { noteId } = req.params;
-  // const note = await Note.findById(noteId);
-  // if (!note) return res.json({ error: "Note not found!" });
+app.patch("/:noteId", update);
 
-  const { title, description } = req.body as IncomingBody;
-  // if (title) note.title = title;
-  // if (description) note.description = description;
+app.delete("/:noteId", remove);
 
-  const notes = await note.findByIdAndUpdate(
-    noteId,
-    { title, description },
-    { new: true }
-  );
-  if (!notes) return res.json({ error: "Note not found!" });
+app.get("/:id", getOne);
 
-  await notes.save();
-
-  res.json({ notes });
-});
-
-app.delete("/:noteId", async (req, res) => {
-  const { noteId } = req.params;
-
-  const removedNote = await note.findByIdAndDelete(noteId);
-  if (!removedNote) return res.json({ error: "Could not remove note!" });
-
-  res.json({ message: "Note removed successfully." });
-});
-
-app.get("/", async (req, res) => {
-  const notes = await note.find();
-  res.json({ notes });
-});
-
-app.get("/:id", async (req, res) => {
-  const { id } = req.params;
-  const notes = await note.findById(id);
-  if (!notes) return res.json({ error: "Note not found!" });
-  res.json({ notes });
-});
+app.get('/',getAll)
 
 // listen to some port
 app.listen(3000, () => {
