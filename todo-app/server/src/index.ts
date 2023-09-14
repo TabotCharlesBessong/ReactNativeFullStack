@@ -1,10 +1,12 @@
 import express from "express";
-import "./db";
-import note from "./model/note";
 import { create, getAll, getOne, remove, update } from "./controller/note";
+import "./db";
+import cors from 'cors'
 
 // create a server
 const app = express();
+
+app.use(cors)
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
