@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.generateToken = void 0;
-const generateToken = (length) => {
+const generateToken = (length = 6) => {
     let otp = "";
     for (let i = 0; i < length; i++) {
-        let digit = Math.floor(Math.random() * 10);
+        const digit = Math.floor(Math.random() * 10);
         otp += digit;
     }
     return otp;

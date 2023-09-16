@@ -13,56 +13,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.create = void 0;
-const nodemailer_1 = __importDefault(require("nodemailer"));
 const user_1 = __importDefault(require("#/models/user"));
-const variables_1 = require("#/utils/variables");
 const helper_1 = require("#/utils/helper");
-const token_1 = __importDefault(require("#/models/token"));
-const template_1 = require("#/mail/template");
-const path_1 = __importDefault(require("path"));
+const mail_1 = require("#/utils/mail");
 const create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password, name } = req.body;
     const user = yield user_1.default.create({ name, email, password });
-    const transport = nodemailer_1.default.createTransport({
-        host: "sandbox.smtp.mailtrap.io",
-        port: 2525,
-        auth: {
-            user: variables_1.MAILTRAP_USER,
-            pass: variables_1.MAILTRAP_PASS,
-        },
-    });
-    const token = (0, helper_1.generateToken)(6);
-    const newToken = yield token_1.default.create({
-        owner: user._id,
-        token
-    });
-    newToken.compareToken('123456');
-    const welcomeMessage = `Hi ${name}, welcome to Podify! There are so much thing that we do for verified users. Use the given OTP to verify your email and enjoy the benefit of a verified user`;
-    transport.sendMail({
-        to: user.email,
-        from: "auth@gmail.com",
-        subject: "Welcome message",
-        html: (0, template_1.generateTemplate)({
-            title: "Welcome to Podify",
-            message: welcomeMessage,
-            logo: "cid:logo",
-            banner: "cid:welcome",
-            link: "#",
-            btnTitle: token,
-        }),
-        attachments: [
-            {
-                filename: "logo.png",
-                path: path_1.default.join(__dirname, "../mail/logo.png"),
-                cid: "logo",
-            },
-            {
-                filename: "welcome.png",
-                path: path_1.default.join(__dirname, "../mail/welcome.png"),
-                cid: "welcome",
-            },
-        ],
-    });
-    res.status(201).json({ user });
+    const token = (0, helper_1.generateToken)();
+    (0, mail_1.sendVerificationMail)(token, { name, email, userId: user._id.toString() });
+    res.status(201).json({ user: { id: user._id, name, email } });
 });
 exports.create = create;
