@@ -14,9 +14,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.create = void 0;
 const user_1 = __importDefault(require("#/models/user"));
+const helper_1 = require("#/utils/helper");
+const mail_1 = require("#/utils/mail");
 const create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password, name } = req.body;
     const user = yield user_1.default.create({ name, email, password });
-    res.status(201).json({ user });
+    const token = (0, helper_1.generateToken)();
+    (0, mail_1.sendVerificationMail)(token, { name, email, userId: user._id.toString() });
+    res.status(201).json({ user: { id: user._id, name, email } });
 });
 exports.create = create;
