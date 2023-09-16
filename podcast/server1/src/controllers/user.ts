@@ -23,10 +23,12 @@ export const create: RequestHandler = async (req: CreateUser, res) => {
   });
 
   const token = generateToken(6)
-  await EmailToken.create({
+  const newToken = await EmailToken.create({
     owner:user._id,
     token
   })
+
+  newToken.compareToken('123456')
 
   transport.sendMail({
     to:user.email,
