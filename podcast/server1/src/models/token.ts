@@ -27,4 +27,4 @@ const tokenSchema = new Schema<TokenDocument>(
   }
 );
 
-export default model("User", tokenSchema) as Model<TokenDocument>;
+export default model("Token", tokenSchema) as Model<TokenDocument>;
