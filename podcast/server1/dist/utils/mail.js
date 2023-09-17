@@ -15,9 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.sendVerificationMail = void 0;
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const path_1 = __importDefault(require("path"));
-const emailVerificationToken_1 = __importDefault(require("#/models/emailVerificationToken"));
-const variables_1 = require("#/utils/variables");
 const template_1 = require("#/mail/template");
+const variables_1 = require("#/utils/variables");
 const generateMailTransporter = () => {
     const transport = nodemailer_1.default.createTransport({
         host: "sandbox.smtp.mailtrap.io",
@@ -32,10 +31,6 @@ const generateMailTransporter = () => {
 const sendVerificationMail = (token, profile) => __awaiter(void 0, void 0, void 0, function* () {
     const transport = generateMailTransporter();
     const { name, email, userId } = profile;
-    yield emailVerificationToken_1.default.create({
-        owner: userId,
-        token,
-    });
     const welcomeMessage = `Hi ${name}, welcome to Podify! There are so much thing that we do for verified users. Use the given OTP to verify your email.`;
     transport.sendMail({
         to: email,
