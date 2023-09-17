@@ -12,12 +12,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sendReVerificationToken = exports.verifyEmail = exports.create = void 0;
+exports.forgotPassword = exports.sendReVerificationToken = exports.verifyEmail = exports.create = void 0;
+const crypto_1 = __importDefault(require("crypto"));
 const user_1 = __importDefault(require("#/models/user"));
 const helper_1 = require("#/utils/helper");
 const mail_1 = require("#/utils/mail");
 const emailVerificationToken_1 = __importDefault(require("#/models/emailVerificationToken"));
 const mongoose_1 = require("mongoose");
+const passwordResetToken_1 = __importDefault(require("#/models/passwordResetToken"));
+const variables_1 = require("#/utils/variables");
 const create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password, name } = req.body;
     const user = yield user_1.default.create({ name, email, password });
@@ -70,3 +73,18 @@ const sendReVerificationToken = (req, res) => __awaiter(void 0, void 0, void 0, 
     res.json({ message: "Please check you mail." });
 });
 exports.sendReVerificationToken = sendReVerificationToken;
+const forgotPassword = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { email } = req.body;
+    const user = yield user_1.default.findOne({ email });
+    if (!user) {
+        return res.status(404).json({ error: "Account Not found" });
+    }
+    const token = crypto_1.default.randomBytes(36).toString('hex');
+    yield passwordResetToken_1.default.create({
+        owner: user._id,
+        token
+    });
+    const resetLink = `${variables_1.PASSWORD_RESET_LINK}?token=${token}&userId=${user._id}`;
+    res.json({ resetLink });
+});
+exports.forgotPassword = forgotPassword;
