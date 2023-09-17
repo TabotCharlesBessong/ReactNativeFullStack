@@ -12,11 +12,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sendVerificationMail = void 0;
+exports.sendForgetPasswordLink = exports.sendVerificationMail = void 0;
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const path_1 = __importDefault(require("path"));
-const template_1 = require("#/mail/template");
 const variables_1 = require("#/utils/variables");
+const template_1 = require("#/mail/template");
 const generateMailTransporter = () => {
     const transport = nodemailer_1.default.createTransport({
         host: "sandbox.smtp.mailtrap.io",
@@ -59,3 +59,34 @@ const sendVerificationMail = (token, profile) => __awaiter(void 0, void 0, void 
     });
 });
 exports.sendVerificationMail = sendVerificationMail;
+const sendForgetPasswordLink = (options) => __awaiter(void 0, void 0, void 0, function* () {
+    const transport = generateMailTransporter();
+    const { email, link } = options;
+    const message = "We just received a request that you forgot your password. No problem you can use the link below and create brand new password.";
+    transport.sendMail({
+        to: email,
+        from: variables_1.VERIFICATION_EMAIL,
+        subject: "Reset Password Link",
+        html: (0, template_1.generateTemplate)({
+            title: "Forget Password",
+            message,
+            logo: "cid:logo",
+            banner: "cid:forget_password",
+            link,
+            btnTitle: "Reset Password",
+        }),
+        attachments: [
+            {
+                filename: "logo.png",
+                path: path_1.default.join(__dirname, "../mail/logo.png"),
+                cid: "logo",
+            },
+            {
+                filename: "forget_password.png",
+                path: path_1.default.join(__dirname, "../mail/forget_password.png"),
+                cid: "forget_password",
+            },
+        ],
+    });
+});
+exports.sendForgetPasswordLink = sendForgetPasswordLink;

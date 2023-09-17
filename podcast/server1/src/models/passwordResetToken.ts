@@ -49,7 +49,8 @@ passwordResetTokenSchema.methods.compareToken = async function (token) {
   return result;
 };
 
-export default model(
-  "PasswordResetToken",
-  passwordResetTokenSchema
-) as Model<PasswordResetTokenDocument, {}, Methods>;
+export default model("PasswordResetToken", passwordResetTokenSchema) as Model<
+  PasswordResetTokenDocument,
+  {},
+  Methods
+>;
