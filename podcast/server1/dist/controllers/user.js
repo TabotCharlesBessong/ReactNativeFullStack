@@ -22,6 +22,10 @@ const create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password, name } = req.body;
     const user = yield user_1.default.create({ name, email, password });
     const token = (0, helper_1.generateToken)();
+    yield emailVerificationToken_1.default.create({
+        owner: user._id,
+        token,
+    });
     (0, mail_1.sendVerificationMail)(token, { name, email, userId: user._id.toString() });
     res.status(201).json({ user: { id: user._id, name, email } });
 });
@@ -46,23 +50,23 @@ exports.verifyEmail = verifyEmail;
 const sendReVerificationToken = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { userId } = req.body;
     if (!(0, mongoose_1.isValidObjectId)(userId))
-        return res.status(403).json({ error: "Invalid request" });
+        return res.status(403).json({ error: "Invalid request!" });
     const user = yield user_1.default.findById(userId);
     if (!user)
-        return res.status(403).json({ error: "Invalid request" });
+        return res.status(403).json({ error: "Invalid request!" });
     yield emailVerificationToken_1.default.findOneAndDelete({
-        owner: userId
+        owner: userId,
     });
-    const token = (0, helper_1.generateToken)(6);
+    const token = (0, helper_1.generateToken)();
     yield emailVerificationToken_1.default.create({
         owner: userId,
-        token
+        token,
     });
     (0, mail_1.sendVerificationMail)(token, {
         name: user === null || user === void 0 ? void 0 : user.name,
         email: user === null || user === void 0 ? void 0 : user.email,
-        userId: user === null || user === void 0 ? void 0 : user._id.toString()
+        userId: user === null || user === void 0 ? void 0 : user._id.toString(),
     });
-    res.json({ message: "Please check your mail" });
+    res.json({ message: "Please check you mail." });
 });
 exports.sendReVerificationToken = sendReVerificationToken;

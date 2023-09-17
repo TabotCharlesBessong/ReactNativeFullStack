@@ -23,9 +23,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.EmailVerificationSchema = exports.CreateUserSchema = void 0;
-const mongoose_1 = require("mongoose");
+exports.EmailVerificationBody = exports.CreateUserSchema = void 0;
 const yup = __importStar(require("yup"));
+const mongoose_1 = require("mongoose");
 exports.CreateUserSchema = yup.object().shape({
     name: yup
         .string()
@@ -41,17 +41,15 @@ exports.CreateUserSchema = yup.object().shape({
         .min(8, "Password is too short!")
         .matches(/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#\$%\^&\*])[a-zA-Z\d!@#\$%\^&\*]+$/, "Password is too simple!"),
 });
-exports.EmailVerificationSchema = yup.object().shape({
-    token: yup.string().trim().required("Invalide token"),
+exports.EmailVerificationBody = yup.object().shape({
+    token: yup.string().trim().required("Invalid token!"),
     userId: yup
         .string()
         .transform(function (value) {
         if (this.isType(value) && (0, mongoose_1.isValidObjectId)(value)) {
             return value;
         }
-        else {
-            return "";
-        }
+        return "";
     })
-        .required("Invalid userId"),
+        .required("Invalid userId!"),
 });

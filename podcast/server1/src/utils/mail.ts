@@ -1,15 +1,12 @@
 import nodemailer from "nodemailer";
 import path from "path";
 
-import User from "#/models/user";
-import EmailVerificationToken from "#/models/emailVerificationToken";
+import { generateTemplate } from "#/mail/template";
 import {
   MAILTRAP_PASS,
   MAILTRAP_USER,
   VERIFICATION_EMAIL,
 } from "#/utils/variables";
-import { generateToken } from "#/utils/helper";
-import { generateTemplate } from "#/mail/template";
 
 const generateMailTransporter = () => {
   const transport = nodemailer.createTransport({
@@ -34,11 +31,6 @@ export const sendVerificationMail = async (token: string, profile: Profile) => {
   const transport = generateMailTransporter();
 
   const { name, email, userId } = profile;
-
-  await EmailVerificationToken.create({
-    owner: userId,
-    token,
-  });
 
   const welcomeMessage = `Hi ${name}, welcome to Podify! There are so much thing that we do for verified users. Use the given OTP to verify your email.`;
 
