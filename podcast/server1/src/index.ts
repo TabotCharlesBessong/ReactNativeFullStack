@@ -9,6 +9,7 @@ const app = express();
 // register our middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(express.static("src/public"));
 
 app.use("/auth", authRouter);
 
