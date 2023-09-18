@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sendForgetPasswordLink = exports.sendVerificationMail = void 0;
+exports.sendPassResetSuccessEmail = exports.sendForgetPasswordLink = exports.sendVerificationMail = void 0;
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const path_1 = __importDefault(require("path"));
 const variables_1 = require("#/utils/variables");
@@ -90,3 +90,33 @@ const sendForgetPasswordLink = (options) => __awaiter(void 0, void 0, void 0, fu
     });
 });
 exports.sendForgetPasswordLink = sendForgetPasswordLink;
+const sendPassResetSuccessEmail = (name, email) => __awaiter(void 0, void 0, void 0, function* () {
+    const transport = generateMailTransporter();
+    const message = `Dear ${name} we just updated your new password. You can now sign in with your new password.`;
+    transport.sendMail({
+        to: email,
+        from: variables_1.VERIFICATION_EMAIL,
+        subject: "Password Reset Successfully",
+        html: (0, template_1.generateTemplate)({
+            title: "Password Reset Successfully",
+            message,
+            logo: "cid:logo",
+            banner: "cid:forget_password",
+            link: variables_1.SIGN_IN_URL,
+            btnTitle: "Log in",
+        }),
+        attachments: [
+            {
+                filename: "logo.png",
+                path: path_1.default.join(__dirname, "../mail/logo.png"),
+                cid: "logo",
+            },
+            {
+                filename: "forget_password.png",
+                path: path_1.default.join(__dirname, "../mail/forget_password.png"),
+                cid: "forget_password",
+            },
+        ],
+    });
+});
+exports.sendPassResetSuccessEmail = sendPassResetSuccessEmail;

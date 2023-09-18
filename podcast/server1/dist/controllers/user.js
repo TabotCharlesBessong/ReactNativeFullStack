@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.generateForgetPasswordLink = exports.sendReVerificationToken = exports.verifyEmail = exports.create = void 0;
+exports.updatePassword = exports.grantValid = exports.generateForgetPasswordLink = exports.sendReVerificationToken = exports.verifyEmail = exports.create = void 0;
 const user_1 = __importDefault(require("#/models/user"));
 const helper_1 = require("#/utils/helper");
 const mail_1 = require("#/utils/mail");
@@ -91,3 +91,24 @@ const generateForgetPasswordLink = (req, res) => __awaiter(void 0, void 0, void 
     res.json({ message: "Check you registered mail." });
 });
 exports.generateForgetPasswordLink = generateForgetPasswordLink;
+const grantValid = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    res.json({ valid: true });
+});
+exports.grantValid = grantValid;
+const updatePassword = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { password, userId } = req.body;
+    const user = yield user_1.default.findById(userId);
+    if (!user)
+        return res.status(403).json({ error: "Unauthorized access!" });
+    const matched = yield user.comparePassword(password);
+    if (matched)
+        return res
+            .status(422)
+            .json({ error: "The new password must be different!" });
+    user.password = password;
+    yield user.save();
+    yield passwordResetToken_1.default.findOneAndDelete({ owner: user._id });
+    (0, mail_1.sendPassResetSuccessEmail)(user.name, user.email);
+    res.json({ message: "Password resets successfully." });
+});
+exports.updatePassword = updatePassword;
