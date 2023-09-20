@@ -14,14 +14,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.signIn = exports.updatePassword = exports.grantValid = exports.generateForgetPasswordLink = exports.sendReVerificationToken = exports.verifyEmail = exports.create = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const user_1 = __importDefault(require("../models/user"));
-const helper_1 = require("../utils/helper");
-const mail_1 = require("../utils/mail");
-const emailVerificationToken_1 = __importDefault(require("../models/emailVerificationToken"));
-const passwordResetToken_1 = __importDefault(require("../models/passwordResetToken"));
+const user_1 = __importDefault(require("#/models/user"));
+const helper_1 = require("#/utils/helper");
+const mail_1 = require("#/utils/mail");
+const emailVerificationToken_1 = __importDefault(require("#/models/emailVerificationToken"));
+const passwordResetToken_1 = __importDefault(require("#/models/passwordResetToken"));
 const mongoose_1 = require("mongoose");
 const crypto_1 = __importDefault(require("crypto"));
-const variables_1 = require("../utils/variables");
+const variables_1 = require("#/utils/variables");
 const create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password, name } = req.body;
     const user = yield user_1.default.create({ name, email, password });
@@ -114,15 +114,28 @@ const updatePassword = (req, res) => __awaiter(void 0, void 0, void 0, function*
 });
 exports.updatePassword = updatePassword;
 const signIn = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     const { email, password } = req.body;
     const user = yield user_1.default.findOne({ email });
     if (!user)
         return res.status(403).json({ error: "Email or password not found" });
     const matched = yield user.comparePassword(password);
-    if (!user)
+    if (!matched)
         return res.status(403).json({ error: "Email or password not valid" });
     const token = jsonwebtoken_1.default.sign({ userId: user._id }, variables_1.JWT_SECRET);
     user.tokens.push(token);
     user.save();
+    res.json({
+        profile: {
+            id: user._id,
+            name: user.name,
+            email: user.email,
+            verified: user.verified,
+            avatar: (_a = user.avatar) === null || _a === void 0 ? void 0 : _a.url,
+            followers: user.followers.length,
+            following: user.followings.length,
+        },
+        token
+    });
 });
 exports.signIn = signIn;

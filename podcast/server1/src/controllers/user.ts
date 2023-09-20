@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import jwt from 'jsonwebtoken'
+import jwt from "jsonwebtoken";
 
 import { CreateUser, VerifyEmailRequest } from "#/@types/user";
 import User from "#/models/user";
@@ -148,12 +148,25 @@ export const signIn: RequestHandler = async (req, res) => {
 
   // compare the email and password
   const matched = await user.comparePassword(password);
-  if (!user)
+  if (!matched)
     return res.status(403).json({ error: "Email or password not valid" });
 
   // generate token
-  const token = jwt.sign({ userId: user._id },JWT_SECRET);
+  const token = jwt.sign({ userId: user._id }, JWT_SECRET);
   user.tokens.push(token);
 
   user.save();
+
+  res.json({
+    profile: {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      verified: user.verified,
+      avatar: user.avatar?.url,
+      followers: user.followers.length,
+      following: user.followings.length,
+    },
+    token
+  });
 };

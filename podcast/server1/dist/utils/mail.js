@@ -15,8 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.sendPassResetSuccessEmail = exports.sendForgetPasswordLink = exports.sendVerificationMail = void 0;
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const path_1 = __importDefault(require("path"));
-const variables_1 = require("../utils/variables");
-const template_1 = require("../mail/template");
+const variables_1 = require("#/utils/variables");
+const template_1 = require("#/mail/template");
 const generateMailTransporter = () => {
     const transport = nodemailer_1.default.createTransport({
         host: "sandbox.smtp.mailtrap.io",
