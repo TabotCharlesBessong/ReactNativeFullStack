@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.isValidPassResetToken = void 0;
-const passwordResetToken_1 = __importDefault(require("#/models/passwordResetToken"));
+const passwordResetToken_1 = __importDefault(require("../models/passwordResetToken"));
 const isValidPassResetToken = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { token, userId } = req.body;
     const resetToken = yield passwordResetToken_1.default.findOne({ owner: userId });
