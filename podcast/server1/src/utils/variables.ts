@@ -7,5 +7,5 @@ export const {
   VERIFICATION_EMAIL,
   PASSWORD_RESET_LINK,
   SIGN_IN_URL,
-  JWT_SECRET
+  JWT_SECRET,
 } = env;

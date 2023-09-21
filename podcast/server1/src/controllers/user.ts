@@ -139,23 +139,23 @@ export const updatePassword: RequestHandler = async (req, res) => {
 };
 
 export const signIn: RequestHandler = async (req, res) => {
-  const { email, password } = req.body;
+  const { password, email } = req.body;
 
-  const user = await User.findOne({ email });
+  const user = await User.findOne({
+    email,
+  });
+  if (!user) return res.status(403).json({ error: "Email/Password mismatch!" });
 
-  if (!user)
-    return res.status(403).json({ error: "Email or password not found" });
-
-  // compare the email and password
+  // compare the password
   const matched = await user.comparePassword(password);
   if (!matched)
-    return res.status(403).json({ error: "Email or password not valid" });
+    return res.status(403).json({ error: "Email/Password mismatch!" });
 
-  // generate token
+  // generate the token for later use.
   const token = jwt.sign({ userId: user._id }, JWT_SECRET);
   user.tokens.push(token);
 
-  user.save();
+  await user.save();
 
   res.json({
     profile: {
@@ -165,8 +165,8 @@ export const signIn: RequestHandler = async (req, res) => {
       verified: user.verified,
       avatar: user.avatar?.url,
       followers: user.followers.length,
-      following: user.followings.length,
+      followings: user.followings.length,
     },
-    token
+    token,
   });
 };

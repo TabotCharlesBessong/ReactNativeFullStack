@@ -115,16 +115,18 @@ const updatePassword = (req, res) => __awaiter(void 0, void 0, void 0, function*
 exports.updatePassword = updatePassword;
 const signIn = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
-    const { email, password } = req.body;
-    const user = yield user_1.default.findOne({ email });
+    const { password, email } = req.body;
+    const user = yield user_1.default.findOne({
+        email,
+    });
     if (!user)
-        return res.status(403).json({ error: "Email or password not found" });
+        return res.status(403).json({ error: "Email/Password mismatch!" });
     const matched = yield user.comparePassword(password);
     if (!matched)
-        return res.status(403).json({ error: "Email or password not valid" });
+        return res.status(403).json({ error: "Email/Password mismatch!" });
     const token = jsonwebtoken_1.default.sign({ userId: user._id }, variables_1.JWT_SECRET);
     user.tokens.push(token);
-    user.save();
+    yield user.save();
     res.json({
         profile: {
             id: user._id,
@@ -133,9 +135,9 @@ const signIn = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             verified: user.verified,
             avatar: (_a = user.avatar) === null || _a === void 0 ? void 0 : _a.url,
             followers: user.followers.length,
-            following: user.followings.length,
+            followings: user.followings.length,
         },
-        token
+        token,
     });
 });
 exports.signIn = signIn;
