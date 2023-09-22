@@ -1,7 +1,11 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const user_1 = require("#/controllers/user");
 const auth_1 = require("#/middleware/auth");
+const fileParser_1 = __importDefault(require("#/middleware/fileParser"));
 const validator_1 = require("#/middleware/validator");
 const validationSchema_1 = require("#/utils/validationSchema");
 const express_1 = require("express");
@@ -17,5 +21,9 @@ router.get("/is-auth", auth_1.mustAuth, (req, res) => {
     res.json({
         profile: req.user,
     });
+});
+router.post("/update-profile", fileParser_1.default, (req, res) => {
+    console.log(req.files);
+    return res.json({ ok: true });
 });
 exports.default = router;

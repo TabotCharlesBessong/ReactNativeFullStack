@@ -8,17 +8,15 @@ import {
   verifyEmail,
 } from "#/controllers/user";
 import { isValidPassResetToken, mustAuth } from "#/middleware/auth";
+import fileParser, { RequestWithFiles } from "#/middleware/fileParser";
 import { validate } from "#/middleware/validator";
-import User from "#/models/user";
 import {
   CreateUserSchema,
   SignInValidationSchema,
   TokenAndIDValidation,
   UpdatePasswordSchema,
 } from "#/utils/validationSchema";
-import { JWT_SECRET } from "#/utils/variables";
 import { Router } from "express";
-import { JwtPayload, verify } from "jsonwebtoken";
 
 const router = Router();
 
@@ -43,6 +41,10 @@ router.get("/is-auth", mustAuth, (req, res) => {
   res.json({
     profile: req.user,
   });
+});
+router.post("/update-profile", fileParser,(req:RequestWithFiles,res) => {
+  console.log(req.files)
+  return res.json({ok:true})
 });
 
 export default router;
