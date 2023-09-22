@@ -2,6 +2,7 @@ import {
   create,
   generateForgetPasswordLink,
   grantValid,
+  logOut,
   sendReVerificationToken,
   signIn,
   updatePassword,
@@ -45,5 +46,6 @@ router.get("/is-auth", mustAuth, (req, res) => {
 });
 
 router.post("/update-profile", mustAuth, fileParser, updateProfile);
+router.post("/logout",mustAuth,logOut)
 
-export default router;
+export default router; 

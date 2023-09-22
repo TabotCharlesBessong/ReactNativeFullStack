@@ -12,6 +12,7 @@ declare global {
         followers: number;
         followings: number;
       };
+      token: string;
     }
   }
 }
