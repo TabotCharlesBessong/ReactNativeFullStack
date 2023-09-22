@@ -23,9 +23,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SignInValidationSchema = exports.UpdatePasswordSchema = exports.TokenAndIDValidation = exports.CreateUserSchema = void 0;
+exports.AudioValidationSchema = exports.SignInValidationSchema = exports.UpdatePasswordSchema = exports.TokenAndIDValidation = exports.CreateUserSchema = void 0;
 const yup = __importStar(require("yup"));
 const mongoose_1 = require("mongoose");
+const audio_category_1 = require("./audio_category");
 exports.CreateUserSchema = yup.object().shape({
     name: yup
         .string()
@@ -74,4 +75,12 @@ exports.UpdatePasswordSchema = yup.object().shape({
 exports.SignInValidationSchema = yup.object().shape({
     email: yup.string().required("Email is missing!").email("Invalid email id!"),
     password: yup.string().trim().required("Password is missing!"),
+});
+exports.AudioValidationSchema = yup.object().shape({
+    title: yup.string().required("Title is missing!"),
+    about: yup.string().required("About is missing!"),
+    category: yup
+        .string()
+        .oneOf(audio_category_1.categories, "Invalid category!")
+        .required("Category is missing!"),
 });
