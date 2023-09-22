@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.signIn = exports.updatePassword = exports.grantValid = exports.generateForgetPasswordLink = exports.sendReVerificationToken = exports.verifyEmail = exports.create = void 0;
+exports.updateProfile = exports.signIn = exports.updatePassword = exports.grantValid = exports.generateForgetPasswordLink = exports.sendReVerificationToken = exports.verifyEmail = exports.create = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const user_1 = __importDefault(require("#/models/user"));
 const helper_1 = require("#/utils/helper");
@@ -22,6 +22,7 @@ const passwordResetToken_1 = __importDefault(require("#/models/passwordResetToke
 const mongoose_1 = require("mongoose");
 const crypto_1 = __importDefault(require("crypto"));
 const variables_1 = require("#/utils/variables");
+const cloud_1 = __importDefault(require("#/cloud"));
 const create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password, name } = req.body;
     const user = yield user_1.default.create({ name, email, password });
@@ -141,3 +142,28 @@ const signIn = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     });
 });
 exports.signIn = signIn;
+const updateProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _b;
+    const { name } = req.body;
+    const avatar = (_b = req.files) === null || _b === void 0 ? void 0 : _b.avatar;
+    const user = yield user_1.default.findById(req.user.id);
+    if (!user)
+        throw new Error("something went wrong, user not found!");
+    if (typeof name !== "string")
+        return res.status(422).json({ error: "Invalid name!" });
+    if (name.trim().length < 3)
+        return res.status(422).json({ error: "Invalid name!" });
+    user.name = name;
+    if (avatar) {
+        const { secure_url, public_id } = yield cloud_1.default.uploader.upload(avatar.filepath, {
+            width: 300,
+            height: 300,
+            crop: "thumb",
+            gravity: "face",
+        });
+        user.avatar = { url: secure_url, publicId: public_id };
+    }
+    yield user.save();
+    res.json({ avatar: user.avatar });
+});
+exports.updateProfile = updateProfile;

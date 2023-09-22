@@ -5,10 +5,10 @@ import {
   sendReVerificationToken,
   signIn,
   updatePassword,
+  updateProfile,
   verifyEmail,
 } from "#/controllers/user";
 import { isValidPassResetToken, mustAuth } from "#/middleware/auth";
-import fileParser, { RequestWithFiles } from "#/middleware/fileParser";
 import { validate } from "#/middleware/validator";
 import {
   CreateUserSchema,
@@ -17,6 +17,7 @@ import {
   UpdatePasswordSchema,
 } from "#/utils/validationSchema";
 import { Router } from "express";
+import fileParser, { RequestWithFiles } from "#/middleware/fileParser";
 
 const router = Router();
 
@@ -42,9 +43,7 @@ router.get("/is-auth", mustAuth, (req, res) => {
     profile: req.user,
   });
 });
-router.post("/update-profile", fileParser,(req:RequestWithFiles,res) => {
-  console.log(req.files)
-  return res.json({ok:true})
-});
+
+router.post("/update-profile", mustAuth, fileParser, updateProfile);
 
 export default router;
