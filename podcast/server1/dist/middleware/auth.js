@@ -52,6 +52,7 @@ const mustAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
         followers: user.followers.length,
         followings: user.followings.length,
     };
+    req.token = token;
     next();
 });
 exports.mustAuth = mustAuth;

@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateProfile = exports.signIn = exports.updatePassword = exports.grantValid = exports.generateForgetPasswordLink = exports.sendReVerificationToken = exports.verifyEmail = exports.create = void 0;
+exports.logOut = exports.updateProfile = exports.signIn = exports.updatePassword = exports.grantValid = exports.generateForgetPasswordLink = exports.sendReVerificationToken = exports.verifyEmail = exports.create = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const user_1 = __importDefault(require("#/models/user"));
 const helper_1 = require("#/utils/helper");
@@ -167,3 +167,17 @@ const updateProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     res.json({ avatar: user.avatar });
 });
 exports.updateProfile = updateProfile;
+const logOut = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { fromAll } = req.query;
+    const token = req.token;
+    const user = yield user_1.default.findById(req.user.id);
+    if (!user)
+        throw new Error("something went wrong, user not found!");
+    if (fromAll === "yes")
+        user.tokens = [];
+    else
+        user.tokens = user.tokens.filter(t => t !== token);
+    yield user.save();
+    res.json({ success: true });
+});
+exports.logOut = logOut;

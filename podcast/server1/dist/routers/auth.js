@@ -23,4 +23,5 @@ router.get("/is-auth", auth_1.mustAuth, (req, res) => {
     });
 });
 router.post("/update-profile", auth_1.mustAuth, fileParser_1.default, user_1.updateProfile);
+router.post("/logout", auth_1.mustAuth, user_1.logOut);
 exports.default = router;

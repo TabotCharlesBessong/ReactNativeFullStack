@@ -213,3 +213,20 @@ export const updateProfile: RequestHandler = async (
 
   res.json({ avatar: user.avatar });
 };
+
+export const logOut: RequestHandler = async (req, res) => {
+  // logout from one
+  const { fromAll } = req.query;
+
+  const token = req.token;
+  const user = await User.findById(req.user.id);
+
+  if (!user) throw new Error("something went wrong, user not found!");
+
+  // logout from all
+  if(fromAll === "yes") user.tokens = []
+  else user.tokens = user.tokens.filter(t => t!== token)
+
+  await user.save()
+  res.json({success:true})
+};
