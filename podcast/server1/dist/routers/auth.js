@@ -5,10 +5,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const user_1 = require("#/controllers/user");
 const auth_1 = require("#/middleware/auth");
-const fileParser_1 = __importDefault(require("#/middleware/fileParser"));
 const validator_1 = require("#/middleware/validator");
 const validationSchema_1 = require("#/utils/validationSchema");
 const express_1 = require("express");
+const fileParser_1 = __importDefault(require("#/middleware/fileParser"));
 const router = (0, express_1.Router)();
 router.post("/create", (0, validator_1.validate)(validationSchema_1.CreateUserSchema), user_1.create);
 router.post("/verify-email", (0, validator_1.validate)(validationSchema_1.TokenAndIDValidation), user_1.verifyEmail);
@@ -22,8 +22,5 @@ router.get("/is-auth", auth_1.mustAuth, (req, res) => {
         profile: req.user,
     });
 });
-router.post("/update-profile", fileParser_1.default, (req, res) => {
-    console.log(req.files);
-    return res.json({ ok: true });
-});
+router.post("/update-profile", auth_1.mustAuth, fileParser_1.default, user_1.updateProfile);
 exports.default = router;
