@@ -1,5 +1,5 @@
 {
-  "name": "client",
+  "name": "podifyplayer",
   "version": "1.0.0",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
@@ -9,13 +9,18 @@
     "web": "expo start --web"
   },
   "dependencies": {
-    "expo": "~49.0.11",
+    "@expo/webpack-config": "^19.0.0",
+    "expo": "~49.0.12",
     "expo-status-bar": "~1.6.0",
     "react": "18.2.0",
-    "react-native": "0.72.4"
+    "react-dom": "18.2.0",
+    "react-native": "0.72.5",
+    "react-native-web": "~0.19.6"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0"
+    "@babel/core": "^7.20.0",
+    "@types/react": "~18.2.14",
+    "typescript": "^5.1.3"
   },
   "private": true
 }
