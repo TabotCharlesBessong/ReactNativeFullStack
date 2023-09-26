@@ -20,7 +20,7 @@ interface Props {
   autoComplete?: TextInputProps["autoComplete"];
   containerStyle?: StyleProp<ViewStyle>;
   onChangeText?: (text: string) => void;
-  value?: TextInputProps["value"];
+  value?: string
 }
 
 const AuthInputField: FC<Props> = (props) => {

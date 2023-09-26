@@ -4,8 +4,15 @@ import { FC } from "react";
 import { Button, SafeAreaView, StyleSheet, Text, TextInput, View } from "react-native";
 import React = require("react");
 import AuthInputField from "src/component/AuthInputField";
+import { Formik } from "formik";
 
 interface Props {}
+
+const initialValues = {
+  name: "",
+  email: "",
+  password: "",
+};
 
 const SignUp: FC<Props> = (props) => {
   const [userInfo, setUserInfo] = React.useState({
@@ -16,42 +23,54 @@ const SignUp: FC<Props> = (props) => {
   // console.log(userInfo)
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.formContainer}>
-        <AuthInputField
-          placeholder="John Doe"
-          label="Name"
-          autoComplete="name"
-          // value={userInfo.name}
-          onChangeText={(text) => {
-            setUserInfo({ ...userInfo, name: text });
-          }}
-        />
-        <AuthInputField
-          keyboardType="email-address"
-          placeholder="john@gmail.com"
-          label="Email"
-          autoCapitalize="none"
-          autoComplete="email"
-          containerStyle={{ marginVertical: 12, marginTop: 12 }}
-          // value={userInfo.email}
-          onChangeText={(text) => {
-            setUserInfo({ ...userInfo, email: text });
-          }}
-        />
-        <AuthInputField
-          placeholder="*******"
-          label="Password"
-          autoCapitalize="none"
-          secureTextEntry={true}
-          containerStyle={{ marginTop: 12 }}
-          // value={userInfo.password}
-          onChangeText={(text) => {
-            setUserInfo({ ...userInfo, password: text });
-          }}
-        />
+      <Formik initialValues={initialValues} onSubmit={(values) => {
+        console.log(values)
+      }} >
 
-        <Button onPress={() => console.log(userInfo)} title="Sign up" />
-      </View>
+        {({handleSubmit,handleChange,values}) => {
+          return (
+            <View style={styles.formContainer}>
+              <AuthInputField
+                placeholder="John Doe"
+                label="Name"
+                autoComplete="name"
+                // value={userInfo.name}
+                onChangeText={handleChange("name")}
+                value={values.name}
+              />
+              <AuthInputField
+                keyboardType="email-address"
+                placeholder="john@gmail.com"
+                label="Email"
+                autoCapitalize="none"
+                autoComplete="email"
+                containerStyle={{ marginVertical: 12, marginTop: 12 }}
+                // value={userInfo.email}
+                onChangeText={handleChange("email")}
+                value={values.email}
+              />
+              <AuthInputField
+                placeholder="*******"
+                label="Password"
+                autoCapitalize="none"
+                secureTextEntry={true}
+                containerStyle={{ marginTop: 12 }}
+                // value={userInfo.password}
+                onChangeText={handleChange("password")}
+                value={values.password}
+              />
+
+              <Button
+                onPress={() => {
+                  console.log(userInfo);
+                }}
+                title="Sign up"
+              />
+            </View>
+          );
+        }}
+
+      </Formik>
     </SafeAreaView>
   );
 };
