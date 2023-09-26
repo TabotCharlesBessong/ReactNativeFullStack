@@ -1,15 +1,11 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
-import { Test } from "./src/component";
+import SignUp from "@views/auth/Signup";
+import { StyleSheet } from "react-native";
 import colors from "./src/utils/colors";
+import React = require("react");
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <Test />
-      <StatusBar style="auto" />
-    </View>
+    <SignUp />
   );
 }
 
