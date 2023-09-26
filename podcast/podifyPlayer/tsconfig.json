@@ -1,6 +1,14 @@
 {
-  "extends": "expo/tsconfig.base",
+   "extends": "@tsconfig/react-native/tsconfig.json",
   "compilerOptions": {
-    "strict": true
+    "jsx": "react",
+    "baseUrl": ".",
+    "paths": {
+      "@components/*": ["src/components/*"],
+      "@utils/*": ["src/utils/*"],
+      "@views/*": ["src/views/*"],
+      "@ui/*": ["src/ui/*"],
+      "src/*": ["src/*"]
+    }
   }
 }

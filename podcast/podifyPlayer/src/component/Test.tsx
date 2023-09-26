@@ -1,4 +1,5 @@
 import {FC} from 'react';
+import React = require('react');
 import {View, StyleSheet,Text} from 'react-native';
 
 interface Props {}
