@@ -22,12 +22,8 @@ const styles = StyleSheet.create({
     height: 45,
     borderRadius: 25,
     color: colors.CONTRAST,
-    marginVertical: 12,
-  },
-  label: {
-    color: colors.CONTRAST,
-    left: 8,
-  },
+    paddingLeft:12
+  }
 });
 
 export default AppInput;

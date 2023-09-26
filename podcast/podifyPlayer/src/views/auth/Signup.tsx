@@ -3,6 +3,7 @@ import colors from "@utils/colors";
 import { FC } from "react";
 import { SafeAreaView, StyleSheet, Text, TextInput, View } from "react-native";
 import React = require("react");
+import AuthInputField from "src/component/AuthInputField";
 
 interface Props {}
 
@@ -10,23 +11,25 @@ const SignUp: FC<Props> = (props) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.formContainer}>
-        <Text style={styles.label}>Name</Text>
-        <AppInput placeholder="John Doe" style={{ borderColor: "yellow" }} />
-        <Text style={styles.label}>Email</Text>
-        <TextInput
-          placeholder="john@gmail.com"
+        <AuthInputField
+          placeholder="John Doe"
+          label="Name"
+          autoComplete="name"
+        />
+        <AuthInputField
           keyboardType="email-address"
-          style={styles.input}
+          placeholder="john@gmail.com"
+          label="Email"
           autoCapitalize="none"
           autoComplete="email"
+          containerStyle={{ marginVertical: 12,marginTop:12 }}
         />
-        <Text style={styles.label}>Password</Text>
-        <TextInput
-          placeholder="*********"
-          placeholderTextColor={colors.INACTIVE_CONTRAST}
-          style={styles.input}
+        <AuthInputField
+          placeholder="*******"
+          label="Password"
           autoCapitalize="none"
           secureTextEntry={true}
+          containerStyle={{ marginTop: 12 }}
         />
       </View>
     </SafeAreaView>
