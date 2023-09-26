@@ -11,6 +11,7 @@ const AppInput: FC<Props> = (props) => {
     {...props}
       placeholderTextColor={colors.CONTRAST}
       style={[styles.input,props.style]}
+      onChangeText={(text) => console.log(text)}
     />
   );
 };

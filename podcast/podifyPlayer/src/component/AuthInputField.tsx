@@ -2,7 +2,14 @@ import AppInput from "@ui/AppInput";
 import colors from "@utils/colors";
 import { FC } from "react";
 import React = require("react");
-import { View, StyleSheet, Text, TextInputProps, StyleProp, ViewStyle } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Text,
+  TextInputProps,
+  StyleProp,
+  ViewStyle,
+} from "react-native";
 
 interface Props {
   placeholder?: string;
@@ -11,14 +18,25 @@ interface Props {
   autoCapitalize?: TextInputProps["autoCapitalize"];
   secureTextEntry?: TextInputProps["secureTextEntry"];
   autoComplete?: TextInputProps["autoComplete"];
-  containerStyle?:StyleProp<ViewStyle>
+  containerStyle?: StyleProp<ViewStyle>;
+  onChangeText?: (text: string) => void;
+  value?: TextInputProps["value"];
 }
 
 const AuthInputField: FC<Props> = (props) => {
-  const { label, placeholder, keyboardType, autoCapitalize, secureTextEntry,autoComplete,containerStyle } =
-    props;
+  const {
+    label,
+    placeholder,
+    keyboardType,
+    autoCapitalize,
+    secureTextEntry,
+    autoComplete,
+    containerStyle,
+    onChangeText,
+    value,
+  } = props;
   return (
-    <View style={[styles.container,containerStyle]}>
+    <View style={[styles.container, containerStyle]}>
       <Text style={styles.label}>{label}</Text>
       <AppInput
         placeholder={placeholder}
@@ -26,6 +44,8 @@ const AuthInputField: FC<Props> = (props) => {
         autoCapitalize={autoCapitalize}
         secureTextEntry={secureTextEntry}
         autoComplete={autoComplete}
+        onChangeText={onChangeText}
+        value={value}
       />
     </View>
   );

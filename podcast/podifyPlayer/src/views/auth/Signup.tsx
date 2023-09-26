@@ -1,13 +1,19 @@
 import AppInput from "@ui/AppInput";
 import colors from "@utils/colors";
 import { FC } from "react";
-import { SafeAreaView, StyleSheet, Text, TextInput, View } from "react-native";
+import { Button, SafeAreaView, StyleSheet, Text, TextInput, View } from "react-native";
 import React = require("react");
 import AuthInputField from "src/component/AuthInputField";
 
 interface Props {}
 
 const SignUp: FC<Props> = (props) => {
+  const [userInfo, setUserInfo] = React.useState({
+    name:'',
+    email:'',
+    password:''
+  })
+  // console.log(userInfo)
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.formContainer}>
@@ -15,6 +21,10 @@ const SignUp: FC<Props> = (props) => {
           placeholder="John Doe"
           label="Name"
           autoComplete="name"
+          // value={userInfo.name}
+          onChangeText={(text) => {
+            setUserInfo({ ...userInfo, name: text });
+          }}
         />
         <AuthInputField
           keyboardType="email-address"
@@ -22,7 +32,11 @@ const SignUp: FC<Props> = (props) => {
           label="Email"
           autoCapitalize="none"
           autoComplete="email"
-          containerStyle={{ marginVertical: 12,marginTop:12 }}
+          containerStyle={{ marginVertical: 12, marginTop: 12 }}
+          // value={userInfo.email}
+          onChangeText={(text) => {
+            setUserInfo({ ...userInfo, email: text });
+          }}
         />
         <AuthInputField
           placeholder="*******"
@@ -30,7 +44,13 @@ const SignUp: FC<Props> = (props) => {
           autoCapitalize="none"
           secureTextEntry={true}
           containerStyle={{ marginTop: 12 }}
+          // value={userInfo.password}
+          onChangeText={(text) => {
+            setUserInfo({ ...userInfo, password: text });
+          }}
         />
+
+        <Button onPress={() => console.log(userInfo)} title="Sign up" />
       </View>
     </SafeAreaView>
   );
