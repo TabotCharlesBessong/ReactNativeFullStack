@@ -1,4 +1,4 @@
-import SignUp from "@views/auth/Signup";
+import SignUp from "@views/auth/SignUp";
 import { StyleSheet } from "react-native";
 import colors from "./src/utils/colors";
 import React = require("react");

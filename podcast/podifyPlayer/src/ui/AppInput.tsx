@@ -1,17 +1,16 @@
-import colors from "@utils/colors";
-import { FC } from "react";
-import React = require("react");
-import { View, StyleSheet, Text, TextInput, TextInputProps } from "react-native";
+import colors from '@utils/colors';
+import {FC} from 'react';
+import React = require('react');
+import {TextInputProps, StyleSheet, TextInput} from 'react-native';
 
 interface Props extends TextInputProps {}
 
-const AppInput: FC<Props> = (props) => {
+const AppInput: FC<Props> = props => {
   return (
     <TextInput
-    {...props}
-      placeholderTextColor={colors.CONTRAST}
-      style={[styles.input,props.style]}
-      onChangeText={(text) => console.log(text)}
+      {...props}
+      placeholderTextColor={colors.INACTIVE_CONTRAST}
+      style={[styles.input, props.style]}
     />
   );
 };
@@ -23,8 +22,8 @@ const styles = StyleSheet.create({
     height: 45,
     borderRadius: 25,
     color: colors.CONTRAST,
-    paddingLeft:12
-  }
+    padding: 10,
+  },
 });
 
 export default AppInput;
