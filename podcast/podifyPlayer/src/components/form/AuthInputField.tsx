@@ -2,6 +2,7 @@ import AppInput from '@ui/AppInput';
 import colors from '@utils/colors';
 import {useFormikContext} from 'formik';
 import {FC} from 'react';
+import React = require('react');
 import {
   View,
   StyleSheet,
