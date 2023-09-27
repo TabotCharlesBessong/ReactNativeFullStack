@@ -43,7 +43,6 @@ const AuthInputField: FC<Props> = props => {
     <View style={[styles.container, containerStyle]}>
       <View style={styles.labelContainer}>
         <Text style={styles.label}>{label}</Text>
-        <Text style={styles.errorMsg}>{errorMsg}</Text>
       </View>
       <AppInput
         placeholder={placeholder}
@@ -54,6 +53,7 @@ const AuthInputField: FC<Props> = props => {
         value={values[name]}
         onBlur={handleBlur(name)}
       />
+      <Text style={styles.errorMsg}>{errorMsg}</Text>
     </View>
   );
 };
