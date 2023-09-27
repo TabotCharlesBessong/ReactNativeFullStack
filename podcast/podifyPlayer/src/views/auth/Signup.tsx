@@ -1,100 +1,76 @@
-import AppInput from "@ui/AppInput";
-import colors from "@utils/colors";
-import { Formik } from "formik";
-import { FC, useState } from "react";
-import React = require("react");
-import {
-  Button,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
-import AuthInputField from "src/component/AuthInputField";
-import * as yup from "yup";
+import AuthInputField from '@components/form/AuthInputField';
+import Form from '@components/form';
+import colors from '@utils/colors';
+import {FC} from 'react';
+import {Button, SafeAreaView, StyleSheet, View} from 'react-native';
+import * as yup from 'yup';
+import SubmitBtn from '@components/form/SubmitBtn';
+import React = require('react');
 
 const signupSchema = yup.object({
   name: yup
     .string()
-    .trim()
-    .min(3, "Name is short")
-    .required("Name is required"),
+    .trim('Name is missing!')
+    .min(3, 'Invalid name!')
+    .required('Name is required!'),
   email: yup
     .string()
-    .trim()
-    .email("Invalid email")
-    .required("Email is required"),
+    .trim('Email is missing!')
+    .email('Invalid email!')
+    .required('Email is required!'),
   password: yup
     .string()
-    .trim()
-    .min(8,"Password must be at least 8 characters long")
+    .trim('Password is missing!')
+    .min(8, 'Password is too short!')
     .matches(
       /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#\$%\^&\*])[a-zA-Z\d!@#\$%\^&\*]+$/,
-      "Password is too simple!"
-      )
-    .required("Password is required")
+      'Password is too simple!',
+    )
+    .required('Password is required!'),
 });
 
 interface Props {}
 
 const initialValues = {
-  name: "",
-  email: "",
-  password: "",
+  name: '',
+  email: '',
+  password: '',
 };
 
-const SignUp: FC<Props> = (props) => {
-  const [userInfo, setUserInfo] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
-
+const SignUp: FC<Props> = props => {
   return (
     <SafeAreaView style={styles.container}>
-      <Formik
-        onSubmit={(values) => {
+      <Form
+        onSubmit={values => {
           console.log(values);
         }}
         initialValues={initialValues}
-        validationSchema={signupSchema}
-      >
-        {({ handleSubmit, handleChange, errors, values }) => {
-          return (
-            <View style={styles.formContainer}>
-              <AuthInputField
-                placeholder="John Doe"
-                label="Name"
-                containerStyle={styles.marginBottom}
-                onChange={handleChange("name")}
-                value={values.name}
-                errorMsg={errors.name}
-              />
-              <AuthInputField
-                placeholder="john@email.com"
-                label="Email"
-                keyboardType="email-address"
-                autoCapitalize="none"
-                containerStyle={styles.marginBottom}
-                onChange={handleChange("email")}
-                value={values.email}
-                errorMsg={errors.email}
-              />
-              <AuthInputField
-                placeholder="********"
-                label="Password"
-                autoCapitalize="none"
-                secureTextEntry
-                onChange={handleChange("password")}
-                value={values.password}
-                errorMsg={errors.password}
-              />
-              <Button onPress={handleSubmit} title="Sign up" />
-            </View>
-          );
-        }}
-      </Formik>
+        validationSchema={signupSchema}>
+        <View style={styles.formContainer}>
+          <AuthInputField
+            name="name"
+            placeholder="John Doe"
+            label="Name"
+            containerStyle={styles.marginBottom}
+          />
+          <AuthInputField
+            name="email"
+            placeholder="john@email.com"
+            label="Email"
+            keyboardType="email-address"
+            autoCapitalize="none"
+            containerStyle={styles.marginBottom}
+          />
+          <AuthInputField
+            name="password"
+            placeholder="********"
+            label="Password"
+            autoCapitalize="none"
+            secureTextEntry
+          />
+          <SubmitBtn title="Sign up" />
+        </View>
+      </Form>
     </SafeAreaView>
   );
 };
@@ -103,11 +79,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.PRIMARY,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   formContainer: {
-    width: "100%",
+    width: '100%',
     paddingHorizontal: 15, // padding in the x direction (left and the right)
   },
   marginBottom: {
