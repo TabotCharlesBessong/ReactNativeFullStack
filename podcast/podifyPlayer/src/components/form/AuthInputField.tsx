@@ -11,6 +11,7 @@ import {
   StyleProp,
   ViewStyle,
 } from 'react-native';
+import Animated,{useAnimatedStyle, useSharedValue, withSequence, withSpring, withTiming} from 'react-native-reanimated';
 
 interface Props {
   name: string;
@@ -23,6 +24,7 @@ interface Props {
 }
 
 const AuthInputField: FC<Props> = props => {
+  const inputStyleValue = useSharedValue(0)
   const {handleChange, values, errors, handleBlur, touched} = useFormikContext<{
     [key: string]: string;
   }>();
@@ -39,8 +41,33 @@ const AuthInputField: FC<Props> = props => {
 
   const errorMsg = touched[name] && errors[name] ? errors[name] : '';
 
+  const shakeUI = () => {
+    inputStyleValue.value = withSequence(
+      withTiming(-10,{
+        duration:150
+      }),
+      withSpring(0,{
+        damping:8,
+        mass:0.5,
+        stiffness:1000,
+        restDisplacementThreshold:0.1
+      })
+    )
+  }
+
+  const inputStyle = useAnimatedStyle(() => {
+    return {
+      // backgroundColor:''
+      transform:[{translateX:inputStyleValue.value}]
+    }
+  })
+
+  React.useEffect(() => {
+    if(errorMsg) shakeUI()
+  },[errorMsg])
+
   return (
-    <View style={[styles.container, containerStyle]}>
+    <Animated.View style={[ containerStyle,inputStyle]}>
       <View style={styles.labelContainer}>
         <Text style={styles.label}>{label}</Text>
       </View>
@@ -54,12 +81,11 @@ const AuthInputField: FC<Props> = props => {
         onBlur={handleBlur(name)}
       />
       <Text style={styles.errorMsg}>{errorMsg}</Text>
-    </View>
+    </Animated.View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {},
   labelContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -71,7 +97,7 @@ const styles = StyleSheet.create({
   },
   errorMsg: {
     color: colors.ERROR,
-  },
+  }
 });
 
 export default AuthInputField;
