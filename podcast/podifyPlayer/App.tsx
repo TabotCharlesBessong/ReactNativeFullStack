@@ -4,11 +4,12 @@ import colors from "./src/utils/colors";
 import React = require("react");
 import { StatusBar } from "expo-status-bar";
 import SignIn from "@views/auth/SignIn";
+import ForgotPassword from "@views/auth/ForgotPassword";
 
 export default function App() {
   return (
     <>
-    <SignIn />
+    <ForgotPassword />
     <StatusBar style="auto" />
     </>
   );
