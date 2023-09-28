@@ -2,14 +2,16 @@ import AuthFormContainer from "@components/AuthFormContainer";
 import Form from "@components/form";
 import AuthInputField from "@components/form/AuthInputField";
 import SubmitBtn from "@components/form/SubmitBtn";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 import AppLink from "@ui/AppLink";
 import PasswordVisibilityIcon from "@ui/PasswordVisibilityIcon";
+import { FormikHelpers } from "formik";
 import { FC } from "react";
 import { StyleSheet, View } from "react-native";
+import { AuthStackParamList } from "src/@types/navigation";
 import * as yup from "yup";
 import React = require("react");
-import { NavigationProp, useNavigation } from "@react-navigation/native";
-import { AuthStackParamList } from "src/@types/navigation";
+import axios from "axios";
 
 const signupSchema = yup.object({
   name: yup
@@ -35,6 +37,12 @@ const signupSchema = yup.object({
 
 interface Props {}
 
+interface NewUser {
+  name:string
+  email:string
+  password:string
+}
+
 const initialValues = {
   name: "",
   email: "",
@@ -44,11 +52,25 @@ const initialValues = {
 const SignUp: FC<Props> = (props) => {
   const [secureEntry, setSecureEntry] = React.useState(true);
   const navigation = useNavigation<NavigationProp<AuthStackParamList>>();
-  return (
+
+  const handleSubmit = async (values:NewUser,actions:FormikHelpers<NewUser>) => {
+    // send the information to the api
+    // fetch()
+    try {
+      const responsne = await axios.post('http://localhost:5000/auth/create',{
+        ...values
+      })
+      console.log(responsne)
+      navigation.navigate("Signin");
+      
+    } catch (error) {
+      console.log("Signup error",error)
+    }
+  }
+
+  return (  
     <Form
-      onSubmit={(values) => {
-        console.log(values);
-      }}
+      onSubmit={handleSubmit}
       initialValues={initialValues}
       validationSchema={signupSchema}
     >
