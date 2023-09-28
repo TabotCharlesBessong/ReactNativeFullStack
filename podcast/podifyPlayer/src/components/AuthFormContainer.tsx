@@ -8,7 +8,7 @@ import images from 'src/constant/image';
 
 interface Props {
   heading:string
-  subHeading:string
+  subHeading?:string
   children:React.ReactNode
 }
 

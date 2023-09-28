@@ -5,11 +5,12 @@ import React = require("react");
 import { StatusBar } from "expo-status-bar";
 import SignIn from "@views/auth/SignIn";
 import ForgotPassword from "@views/auth/ForgotPassword";
+import Verification from "@views/auth/Verification";
 
 export default function App() {
   return (
     <>
-    <ForgotPassword />
+    <Verification />
     <StatusBar style="auto" />
     </>
   );
