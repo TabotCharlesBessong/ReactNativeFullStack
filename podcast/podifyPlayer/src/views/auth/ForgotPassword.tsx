@@ -59,12 +59,6 @@ const ForgotPassword: FC<Props> = (props) => {
 };
 
 const styles = StyleSheet.create({
-  // container: {
-  //   flex: 1,
-  //   backgroundColor: colors.PRIMARY,
-  //   alignItems: "center",
-  //   justifyContent: "center",
-  // },
   formContainer: {
     width: "100%",
     paddingHorizontal: 15, // padding in the x direction (left and the right)
