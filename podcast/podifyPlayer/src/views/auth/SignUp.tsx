@@ -1,16 +1,14 @@
-import AuthInputField from "@components/form/AuthInputField";
 import Form from "@components/form";
+import AuthInputField from "@components/form/AuthInputField";
+import SubmitBtn from "@components/form/SubmitBtn";
+import AppLink from "@ui/AppLink";
+import PasswordVisibilityIcon from "@ui/PasswordVisibilityIcon";
 import colors from "@utils/colors";
 import { FC } from "react";
-import { Button, SafeAreaView, StyleSheet, View } from "react-native";
+import { SafeAreaView, StyleSheet, View } from "react-native";
 import * as yup from "yup";
-import SubmitBtn from "@components/form/SubmitBtn";
-import Icon from "react-native-vector-icons/Entypo";
 import React = require("react");
-import { Entypo } from "@expo/vector-icons";
-import PasswordVisibilityIcon from "@ui/PasswordVisibilityIcon";
-import AppLink from "@ui/AppLink";
-import CircleUI from "@ui/CircleUI";
+import AuthFormContainer from "@components/AuthFormContainer";
 
 const signupSchema = yup.object({
   name: yup
@@ -44,12 +42,8 @@ const initialValues = {
 
 const SignUp: FC<Props> = (props) => {
   const [secureEntry, setSecureEntry] = React.useState(true);
-  return (
-    <SafeAreaView style={styles.container}>
-      <CircleUI size={200} position="top-right" />
-      <CircleUI size={100} position="bottom-right" />
-      <CircleUI size={200} position="top-left" />
-      <CircleUI size={100} position="bottom-left" />
+  return (      
+
       <Form
         onSubmit={(values) => {
           console.log(values);
@@ -57,6 +51,7 @@ const SignUp: FC<Props> = (props) => {
         initialValues={initialValues}
         validationSchema={signupSchema}
       >
+        <AuthFormContainer heading="Welcome!" subHeading="Let's get started by creating your account !" children={
         <View style={styles.formContainer}>
           <AuthInputField
             name="name"
@@ -91,18 +86,19 @@ const SignUp: FC<Props> = (props) => {
             <AppLink title="sign in" />
           </View>
         </View>
+
+        } />
       </Form>
-    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.PRIMARY,
-    alignItems: "center",
-    justifyContent: "center",
-  },
+  // container: {
+  //   flex: 1,
+  //   backgroundColor: colors.PRIMARY,
+  //   alignItems: "center",
+  //   justifyContent: "center",
+  // },
   formContainer: {
     width: "100%",
     paddingHorizontal: 15, // padding in the x direction (left and the right)
