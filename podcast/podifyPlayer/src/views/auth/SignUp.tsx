@@ -8,6 +8,7 @@ import SubmitBtn from '@components/form/SubmitBtn';
 import Icon from 'react-native-vector-icons/Entypo';
 import React = require('react');
 import { Entypo } from '@expo/vector-icons';
+import PasswordVisibilityIcon from '@ui/PasswordVisibilityIcon';
 
 const signupSchema = yup.object({
   name: yup
@@ -40,6 +41,7 @@ const initialValues = {
 };
 
 const SignUp: FC<Props> = props => {
+  const [secureEntry, setSecureEntry] = React.useState(true)
   return (
     <SafeAreaView style={styles.container}>
       <Form
@@ -68,10 +70,12 @@ const SignUp: FC<Props> = props => {
             placeholder="********"
             label="Password"
             autoCapitalize="none"
-            secureTextEntry
+            secureTextEntry={secureEntry}
             containerStyle={styles.marginBottom}
-            rightIcon={<Entypo name="eye" color="white" size={30} />}
-            // onRightIconPress
+            rightIcon={<PasswordVisibilityIcon privateIcon={secureEntry} />}
+            onRightIconPress={() => {
+              setSecureEntry(!secureEntry)
+            }}
           />
           <SubmitBtn title="Sign up" />
         </View>
