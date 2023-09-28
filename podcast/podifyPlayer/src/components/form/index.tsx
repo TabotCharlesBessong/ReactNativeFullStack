@@ -1,5 +1,6 @@
 import {Formik, FormikHelpers} from 'formik';
 import {ReactNode} from 'react';
+import React = require('react');
 
 interface Props<T> {
   initialValues: any;

@@ -8,6 +8,8 @@ import { FC } from "react";
 import { StyleSheet, View } from "react-native";
 import * as yup from "yup";
 import React = require("react");
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { AuthStackParamList } from "src/@types/navigation";
 
 const signupSchema = yup.object({
   email: yup
@@ -31,6 +33,7 @@ const initialValues = {
 
 const SignIn: FC<Props> = (props) => {
   const [secureEntry, setSecureEntry] = React.useState(true);
+  const navigation = useNavigation<NavigationProp<AuthStackParamList>>()
   return (
     <Form
       onSubmit={(values) => {
@@ -43,7 +46,7 @@ const SignIn: FC<Props> = (props) => {
         heading="Welcome back!"
         subHeading="Jump back right where you left"
         children={
-          <View style={styles.formContainer}> 
+          <View style={styles.formContainer}>
             <AuthInputField
               name="email"
               placeholder="john@email.com"
@@ -61,14 +64,24 @@ const SignIn: FC<Props> = (props) => {
               containerStyle={styles.marginBottom}
               rightIcon={<PasswordVisibilityIcon privateIcon={secureEntry} />}
               onRightIconPress={() => {
-                setSecureEntry(!secureEntry);
+                setSecureEntry(!secureEntry); 
               }}
             />
             <SubmitBtn title="Sign in" />
 
             <View style={styles.linkContainer}>
-              <AppLink title="I lost my password" />
-              <AppLink title="create your account" />
+              <AppLink
+                title="I lost my password"
+                onPress={() => {
+                  navigation.navigate("Forgot");
+                }}
+              />
+              <AppLink
+                title="create your account"
+                onPress={() => {
+                  navigation.navigate("Signup");
+                }}
+              />
             </View>
           </View>
         }
