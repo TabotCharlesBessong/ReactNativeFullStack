@@ -1,55 +1,62 @@
-import AuthInputField from '@components/form/AuthInputField';
-import Form from '@components/form';
-import colors from '@utils/colors';
-import {FC} from 'react';
-import {Button, SafeAreaView, StyleSheet, View} from 'react-native';
-import * as yup from 'yup';
-import SubmitBtn from '@components/form/SubmitBtn';
-import Icon from 'react-native-vector-icons/Entypo';
-import React = require('react');
-import { Entypo } from '@expo/vector-icons';
-import PasswordVisibilityIcon from '@ui/PasswordVisibilityIcon';
+import AuthInputField from "@components/form/AuthInputField";
+import Form from "@components/form";
+import colors from "@utils/colors";
+import { FC } from "react";
+import { Button, SafeAreaView, StyleSheet, View } from "react-native";
+import * as yup from "yup";
+import SubmitBtn from "@components/form/SubmitBtn";
+import Icon from "react-native-vector-icons/Entypo";
+import React = require("react");
+import { Entypo } from "@expo/vector-icons";
+import PasswordVisibilityIcon from "@ui/PasswordVisibilityIcon";
+import AppLink from "@ui/AppLink";
+import CircleUI from "@ui/CircleUI";
 
 const signupSchema = yup.object({
   name: yup
     .string()
-    .trim('Name is missing!')
-    .min(3, 'Invalid name!')
-    .required('Name is required!'),
+    .trim("Name is missing!")
+    .min(3, "Invalid name!")
+    .required("Name is required!"),
   email: yup
     .string()
-    .trim('Email is missing!')
-    .email('Invalid email!')
-    .required('Email is required!'),
+    .trim("Email is missing!")
+    .email("Invalid email!")
+    .required("Email is required!"),
   password: yup
     .string()
-    .trim('Password is missing!')
-    .min(8, 'Password is too short!')
+    .trim("Password is missing!")
+    .min(8, "Password is too short!")
     .matches(
       /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#\$%\^&\*])[a-zA-Z\d!@#\$%\^&\*]+$/,
-      'Password is too simple!',
+      "Password is too simple!"
     )
-    .required('Password is required!'),
+    .required("Password is required!"),
 });
 
 interface Props {}
 
 const initialValues = {
-  name: '',
-  email: '',
-  password: '',
+  name: "",
+  email: "",
+  password: "",
 };
 
-const SignUp: FC<Props> = props => {
-  const [secureEntry, setSecureEntry] = React.useState(true)
+const SignUp: FC<Props> = (props) => {
+  const [secureEntry, setSecureEntry] = React.useState(true);
   return (
     <SafeAreaView style={styles.container}>
+      <CircleUI size={200} position="top-right" />
+      <CircleUI size={100} position="bottom-right" />
+      <CircleUI size={200} position="top-left" />
+      <CircleUI size={100} position="bottom-left" />
       <Form
-        onSubmit={values => {
+        onSubmit={(values) => {
           console.log(values);
         }}
         initialValues={initialValues}
-        validationSchema={signupSchema}>
+        validationSchema={signupSchema}
+      >
         <View style={styles.formContainer}>
           <AuthInputField
             name="name"
@@ -74,10 +81,15 @@ const SignUp: FC<Props> = props => {
             containerStyle={styles.marginBottom}
             rightIcon={<PasswordVisibilityIcon privateIcon={secureEntry} />}
             onRightIconPress={() => {
-              setSecureEntry(!secureEntry)
+              setSecureEntry(!secureEntry);
             }}
           />
           <SubmitBtn title="Sign up" />
+
+          <View style={styles.linkContainer}>
+            <AppLink title="I lost my password" />
+            <AppLink title="sign in" />
+          </View>
         </View>
       </Form>
     </SafeAreaView>
@@ -88,15 +100,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.PRIMARY,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   formContainer: {
-    width: '100%',
+    width: "100%",
     paddingHorizontal: 15, // padding in the x direction (left and the right)
   },
   marginBottom: {
     marginBottom: 20,
+  },
+  linkContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginTop: 20,
   },
 });
 
