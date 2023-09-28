@@ -1,21 +1,22 @@
+import SignUp from "@views/auth/SignUp";
+import { StyleSheet } from "react-native";
+import colors from "./src/utils/colors";
+import React = require("react");
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
-import { Test } from "./src/component";
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <Test />
-      <StatusBar style="auto" />
-    </View>
+    <>
+    <SignUp />
+    <StatusBar style="auto" />
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: colors.ERROR,
     alignItems: "center",
     justifyContent: "center",
   },
