@@ -1,8 +1,7 @@
 import AppButton from '@ui/AppButton';
-import { useFormikContext } from 'formik';
-import { FC } from 'react';
-import { StyleSheet } from 'react-native';
-import React = require('react');
+import {useFormikContext} from 'formik';
+import {FC} from 'react';
+import {StyleSheet} from 'react-native';
 
 interface Props {
   title: string;
