@@ -3,7 +3,7 @@ import AppButton from "@ui/AppButton";
 import AppLink from "@ui/AppLink";
 import OTPField from "@ui/OTPField";
 import { FC } from "react";
-import { StyleSheet, TextInput, View } from "react-native";
+import { Keyboard, StyleSheet, TextInput, View } from "react-native";
 import React = require("react");
 
 interface Props {}
@@ -30,6 +30,14 @@ const Verification: FC<Props> = (props) => {
     setOtp([...newOtp])
   }
 
+  const handlePaste = (value:string) => {
+    if(value.length === 6){
+      Keyboard.dismiss()
+      const newOtp = value.split('')
+      setOtp([...newOtp])
+    }
+  }
+
   React.useEffect(() => {
     inputRef.current?.focus()
   },[otpIndex])
@@ -46,6 +54,8 @@ const Verification: FC<Props> = (props) => {
                 onKeyPress={({ nativeEvent }) => {
                   handleChange(nativeEvent.key,index);
                 }}
+                onChangeText={handlePaste}
+                value={otp[index] || ''}
               />
             ))}
           </View>
