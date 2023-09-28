@@ -9,18 +9,25 @@ import {
   TextInputProps,
 } from "react-native";
 
-interface Props extends TextInputProps {}
+interface Props extends TextInputProps {
+  ref: any;
+}
 
-const OTPField: FC<Props> = (props) => {
+
+
+const OTPField: FC<Props> = React.forwardRef<TextInput, Props>((props, ref) => {
   return (
     <TextInput
       {...props}
+      ref={ref}
       placeholder="*"
       placeholderTextColor={colors.INACTIVE_CONTRAST}
       style={[styles.input, props.style]}
+      inputMode="numeric"
+      keyboardType="numeric"
     />
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {},

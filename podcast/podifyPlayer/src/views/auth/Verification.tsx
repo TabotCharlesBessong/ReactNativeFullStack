@@ -3,18 +3,36 @@ import AppButton from "@ui/AppButton";
 import AppLink from "@ui/AppLink";
 import OTPField from "@ui/OTPField";
 import { FC } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, TextInput, View } from "react-native";
 import React = require("react");
 
-
-
 interface Props {}
-
-
 
 const otpFields = new Array(6).fill("");
 
 const Verification: FC<Props> = (props) => {
+  const [otp, setOtp] = React.useState([...otpFields]);
+  const [otpIndex, setOtpIndex] = React.useState(0);
+  const inputRef = React.useRef<TextInput>(null);
+  inputRef.current?.focus;
+
+  const handleChange = (value:string,index:number) => {
+    const newOtp = [...otp]
+    if(value === 'Backspace'){
+      // move to the previous
+      if(!newOtp[index]) setOtpIndex(index - 1)
+      newOtp[index] = ''
+    }else{
+      // update otp and move further
+      setOtpIndex(index + 1)
+      newOtp[index] = value
+    }
+    setOtp([...newOtp])
+  }
+
+  React.useEffect(() => {
+    inputRef.current?.focus()
+  },[otpIndex])
   return (
     <AuthFormContainer
       heading="Please check your email"
@@ -22,7 +40,13 @@ const Verification: FC<Props> = (props) => {
         <View style={styles.formContainer}>
           <View style={styles.inputContainer}>
             {otpFields.map((_, index) => (
-              <OTPField key={index} />
+              <OTPField
+                ref={otpIndex === index ? inputRef : null}
+                key={index}
+                onKeyPress={({ nativeEvent }) => {
+                  handleChange(nativeEvent.key,index);
+                }}
+              />
             ))}
           </View>
           <AppButton title="Verify Account" />
