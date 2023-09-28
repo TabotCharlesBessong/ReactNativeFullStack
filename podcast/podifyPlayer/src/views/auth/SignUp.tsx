@@ -8,6 +8,8 @@ import { FC } from "react";
 import { StyleSheet, View } from "react-native";
 import * as yup from "yup";
 import React = require("react");
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { AuthStackParamList } from "src/@types/navigation";
 
 const signupSchema = yup.object({
   name: yup
@@ -41,53 +43,66 @@ const initialValues = {
 
 const SignUp: FC<Props> = (props) => {
   const [secureEntry, setSecureEntry] = React.useState(true);
-  return (      
+  const navigation = useNavigation<NavigationProp<AuthStackParamList>>();
+  return (
+    <Form
+      onSubmit={(values) => {
+        console.log(values);
+      }}
+      initialValues={initialValues}
+      validationSchema={signupSchema}
+    >
+      <AuthFormContainer
+        heading="Welcome!"
+        subHeading="Let's get started by creating your account !"
+        children={
+          <View style={styles.formContainer}>
+            <AuthInputField
+              name="name"
+              placeholder="John Doe"
+              label="Name"
+              containerStyle={styles.marginBottom}
+            />
+            <AuthInputField
+              name="email"
+              placeholder="john@email.com"
+              label="Email"
+              keyboardType="email-address"
+              autoCapitalize="none"
+              containerStyle={styles.marginBottom}
+            />
+            <AuthInputField
+              name="password"
+              placeholder="********"
+              label="Password"
+              autoCapitalize="none"
+              secureTextEntry={secureEntry}
+              containerStyle={styles.marginBottom}
+              rightIcon={<PasswordVisibilityIcon privateIcon={secureEntry} />}
+              onRightIconPress={() => {
+                setSecureEntry(!secureEntry);
+              }}
+            />
+            <SubmitBtn title="Sign up" />
 
-      <Form
-        onSubmit={(values) => {
-          console.log(values);
-        }}
-        initialValues={initialValues}
-        validationSchema={signupSchema}
-      >
-        <AuthFormContainer heading="Welcome!" subHeading="Let's get started by creating your account !" children={
-        <View style={styles.formContainer}>
-          <AuthInputField
-            name="name"
-            placeholder="John Doe"
-            label="Name"
-            containerStyle={styles.marginBottom}
-          />
-          <AuthInputField
-            name="email"
-            placeholder="john@email.com"
-            label="Email"
-            keyboardType="email-address"
-            autoCapitalize="none"
-            containerStyle={styles.marginBottom}
-          />
-          <AuthInputField
-            name="password"
-            placeholder="********"
-            label="Password"
-            autoCapitalize="none"
-            secureTextEntry={secureEntry}
-            containerStyle={styles.marginBottom}
-            rightIcon={<PasswordVisibilityIcon privateIcon={secureEntry} />}
-            onRightIconPress={() => {
-              setSecureEntry(!secureEntry);
-            }}
-          />
-          <SubmitBtn title="Sign up" />
-
-          <View style={styles.linkContainer}>
-            <AppLink title="I lost my password" />
-            <AppLink title="sign in" />
+            <View style={styles.linkContainer}>
+              <AppLink
+                onPress={() => {
+                  navigation.navigate("Forgot");
+                }}
+                title="I lost my password"
+              />
+              <AppLink
+                onPress={() => {
+                  navigation.navigate("Signin");
+                }}
+                title="sign in"
+              />
+            </View>
           </View>
-        </View>
-
-        } />
-      </Form>
+        }
+      />
+    </Form>
   );
 };
 

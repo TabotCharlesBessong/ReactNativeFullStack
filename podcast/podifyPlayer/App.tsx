@@ -1,18 +1,14 @@
-import SignUp from "@views/auth/SignUp";
+import { NavigationContainer } from "@react-navigation/native";
 import { StyleSheet } from "react-native";
+import AuthNavigator from "src/navigation/AuthNavigator";
 import colors from "./src/utils/colors";
 import React = require("react");
-import { StatusBar } from "expo-status-bar";
-import SignIn from "@views/auth/SignIn";
-import ForgotPassword from "@views/auth/ForgotPassword";
-import Verification from "@views/auth/Verification";
 
 export default function App() {
   return (
-    <>
-    <Verification />
-    <StatusBar style="auto" />
-    </>
+    <NavigationContainer>
+      <AuthNavigator />
+    </NavigationContainer>
   );
 }
 

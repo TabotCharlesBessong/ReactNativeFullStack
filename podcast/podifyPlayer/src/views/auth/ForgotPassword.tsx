@@ -1,4 +1,3 @@
-
 import AuthFormContainer from "@components/AuthFormContainer";
 import Form from "@components/form";
 import AuthInputField from "@components/form/AuthInputField";
@@ -8,13 +7,15 @@ import { FC } from "react";
 import { StyleSheet, View } from "react-native";
 import * as yup from "yup";
 import React = require("react");
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { AuthStackParamList } from "src/@types/navigation";
 
 const signupSchema = yup.object({
   email: yup
     .string()
     .trim("Email is missing!")
     .email("Invalid email!")
-    .required("Email is required!")
+    .required("Email is required!"),
 });
 
 interface Props {}
@@ -24,6 +25,7 @@ const initialValues = {
 };
 
 const ForgotPassword: FC<Props> = (props) => {
+  const navigation = useNavigation<NavigationProp<AuthStackParamList>>();
   return (
     <Form
       onSubmit={(values) => {
@@ -46,10 +48,20 @@ const ForgotPassword: FC<Props> = (props) => {
               containerStyle={styles.marginBottom}
             />
             <SubmitBtn title="Send Link" />
- 
+
             <View style={styles.linkContainer}>
-              <AppLink title="login into your account" />
-              <AppLink title="create your account" />
+              <AppLink
+                onPress={() => {
+                  navigation.navigate("Signin");
+                }}
+                title="login into your account"
+              />
+              <AppLink
+                onPress={() => {
+                  navigation.navigate("Signup");
+                }}
+                title="create your account"
+              />
             </View>
           </View>
         }
