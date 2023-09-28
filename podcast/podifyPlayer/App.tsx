@@ -3,11 +3,12 @@ import { StyleSheet } from "react-native";
 import colors from "./src/utils/colors";
 import React = require("react");
 import { StatusBar } from "expo-status-bar";
+import SignIn from "@views/auth/SignIn";
 
 export default function App() {
   return (
     <>
-    <SignUp />
+    <SignIn />
     <StatusBar style="auto" />
     </>
   );

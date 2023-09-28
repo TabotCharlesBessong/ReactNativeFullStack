@@ -1,14 +1,13 @@
+import AuthFormContainer from "@components/AuthFormContainer";
 import Form from "@components/form";
 import AuthInputField from "@components/form/AuthInputField";
 import SubmitBtn from "@components/form/SubmitBtn";
 import AppLink from "@ui/AppLink";
 import PasswordVisibilityIcon from "@ui/PasswordVisibilityIcon";
-import colors from "@utils/colors";
 import { FC } from "react";
-import { SafeAreaView, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import * as yup from "yup";
 import React = require("react");
-import AuthFormContainer from "@components/AuthFormContainer";
 
 const signupSchema = yup.object({
   name: yup
