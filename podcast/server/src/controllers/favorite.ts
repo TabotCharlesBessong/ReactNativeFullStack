@@ -26,6 +26,8 @@ export const toggleFavorite: RequestHandler = async (req, res) => {
     await Favorite.updateOne(
       { owner: req.user.id },
       {
+        // pull methods removes from an existing array.
+        // acting like a filter
         $pull: { items: audioId },
       }
     );
@@ -38,6 +40,7 @@ export const toggleFavorite: RequestHandler = async (req, res) => {
       await Favorite.updateOne(
         { owner: req.user.id },
         {
+          // will not allow any duplicate value
           $addToSet: { items: audioId },
         }
       );
