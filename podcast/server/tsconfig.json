@@ -9,10 +9,10 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "rootDir": "./src",
-    "outDir": "./dix",
+    "outDir": "./dist",
     "baseUrl": ".",
     "paths": {
-      "@/":["./src/*"]
+      "#/*": ["./src/*"]
     }
   }
 }
