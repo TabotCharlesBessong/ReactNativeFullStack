@@ -3,12 +3,15 @@
   "version": "1.0.0",
   "description": "server for podify app",
   "main": "index.js",
+  "engines": {
+    "node": "14.x"
+  },
   "scripts": {
     "dev": "tsnd --respawn -r tsconfig-paths/register --pretty --transpile-only ./src/index.ts",
     "build": "tsc && tsc-alias"
   },
   "keywords": [],
-  "author": "fsniraj",
+  "author": "Charles",
   "license": "ISC",
   "dependencies": {
     "@types/jsonwebtoken": "^9.0.1",
