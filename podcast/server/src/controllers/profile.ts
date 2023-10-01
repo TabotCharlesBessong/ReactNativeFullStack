@@ -128,7 +128,7 @@ export const getPublicProfile: RequestHandler = async (req, res) => {
     return res.status(422).json({ error: "Invalid profile id!" });
 
   const user = await User.findById(profileId);
-  if (!user) return res.status(422).json({ error: "User not found!" });
+  if (!user) return res.status(404).json({ error: "User not found!" });
 
   res.json({
     profile: {
