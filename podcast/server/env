@@ -1,0 +1,11 @@
+
+MONGO_URI = mongodb+srv://tabotcharles:charles1974@cluster0.vjfxkls.mongodb.net/podcast
+MAILTRAP_USER = a9953a79a6707c
+MAILTRAP_PASS = 78b7106da0be5f
+VERIFICATION_EMAIL = epsihomemarketplace@gmail.com
+PASSWORD_RESET_LINK = http://localhost:5000/reset-password.html
+JWT_SECRET = asdfghjkl
+CLOUD_NAME = doo6elkig
+CLOUD_KEY = 765525615418712
+CLOUD_SECRET = b97PLJ3v8MBZTrdjEcWXuJ58MNo
+PORT = 5000
