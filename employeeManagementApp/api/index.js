@@ -63,3 +63,12 @@ app.post("/add-employee", async (req, res) => {
     res.status(500).json({ message: "Failed to add employee" });
   }
 });
+
+app.get("/employees",async (req,res) => {
+  try {
+    const employees = await Employee.find()
+    res.status(200).json(employees)
+  } catch (error) {
+    res.status(500).json({message:"Failed to retrieve all the employees"})
+  }
+})
