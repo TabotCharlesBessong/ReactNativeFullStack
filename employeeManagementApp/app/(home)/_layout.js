@@ -8,7 +8,7 @@ const Layout = () => {
       <Stack.Screen name="adddetails" />
       <Stack.Screen name="markattendance" />
       <Stack.Screen name="summary" />
-      <Stack.Screen name="[user]" />
+      {/* <Stack.Screen name="[user]" /> */}
     </Stack>
   )
 }
