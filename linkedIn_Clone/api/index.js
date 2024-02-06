@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const moment = require("moment");
 const dotenv = require("dotenv");
+const userRouter = require("./routers/user.router")
 
 const app = express();
 const port = 5000 || process.env.PORT;
@@ -13,6 +14,8 @@ dotenv.config();
 // middlewares
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+app.use("/auth",userRouter)
 
 mongoose
   .connect(process.env.MONGO_URI)
