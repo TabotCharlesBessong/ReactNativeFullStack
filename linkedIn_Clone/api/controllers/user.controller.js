@@ -2,6 +2,10 @@ const sendVerificationEmail = require("../helper/mail")
 const User = require("../models/user")
 const crypto = require("crypto")
 const bcrypt = require("bcrypt")
+const jwt = require("jsonwebtoken")
+const {generateSecretKey} = require("../helper")
+
+const secretKey = generateSecretKey()
 
 const register = async (req,res) => {
   try {
@@ -63,4 +67,27 @@ const verify = async (req,res) => {
   }
 }
 
-module.exports = {register,verify}
+const login = async (req,res) => {
+  try {
+    const {email,password} = req.body
+
+    // check if user already exists
+    const user = await User.findOne({email})
+    if(!user){
+      return res.status(401).json({message:"Invalid user credentials"})
+    }
+
+    // check if password is correct
+    if(user.password !== password){
+      return res.status(401).json({message:"Invalid user credentials"})
+    }
+
+    const token = jwt.sign({userId:user._id},secretKey)
+    res.status(200).json({token})
+  } catch (error) {
+    res.status(500).json({message:"Login failed"})
+    console.log(error)
+  }
+}
+
+module.exports = {register,verify,login}
