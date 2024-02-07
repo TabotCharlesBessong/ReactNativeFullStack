@@ -32,6 +32,7 @@ const register = () => {
     axios.post("http://localhost:5000/auth/register",user).then((response) => {
       console.log(response)
       Alert.alert("Registration successful","You have been registered successfully")
+      router.push("/login")
       setName("")
       setEmail("")
       setPassword("")
@@ -67,7 +68,7 @@ const register = () => {
           </Text>
         </View>
 
-        <View style={{ marginTop: 50 }}>
+        <View style={{ marginTop: 40 }}>
           <View
             style={{
               flexDirection: "row",
@@ -204,7 +205,7 @@ const register = () => {
             </Text>
           </View>
 
-          <View style={{ marginTop: 80 }} />
+          <View style={{ marginTop: 60 }} />
 
           <Pressable
             onPress={handleRegister}

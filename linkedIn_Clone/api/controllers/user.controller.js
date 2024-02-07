@@ -1,6 +1,11 @@
 const sendVerificationEmail = require("../helper/mail")
 const User = require("../models/user")
 const crypto = require("crypto")
+const bcrypt = require("bcrypt")
+const jwt = require("jsonwebtoken")
+const {generateSecretKey} = require("../helper")
+
+const secretKey = generateSecretKey()
 
 const register = async (req,res) => {
   try {
@@ -18,6 +23,7 @@ const register = async (req,res) => {
     }
 
     // creating a new user
+    const newPassword = bcrypt.hash(password,10)
     const newUser = new User({
       name,
       email,
@@ -42,4 +48,46 @@ const register = async (req,res) => {
   }
 }
 
-module.exports = {register}
+const verify = async (req,res) => {
+  try {
+    const token = req.params.token
+
+    const user = await User.findOne({verificationToken:token})
+    if(!user){
+      return res.status(404).json({message:"Invalid verification token"})
+    }
+
+    // mark user as verified
+    user.verified = true
+    user.verificationToken = undefined
+    await user.save()
+    res.status(200).json({ message: "Email verified successfully" });
+  } catch (error) {
+    res.status(500).json({message:"Email verification failed"})
+  }
+}
+
+const login = async (req,res) => {
+  try {
+    const {email,password} = req.body
+
+    // check if user already exists
+    const user = await User.findOne({email})
+    if(!user){
+      return res.status(401).json({message:"Invalid user credentials"})
+    }
+
+    // check if password is correct
+    if(user.password !== password){
+      return res.status(401).json({message:"Invalid user credentials"})
+    }
+
+    const token = jwt.sign({userId:user._id},secretKey)
+    res.status(200).json({token})
+  } catch (error) {
+    res.status(500).json({message:"Login failed"})
+    console.log(error)
+  }
+}
+
+module.exports = {register,verify,login}
