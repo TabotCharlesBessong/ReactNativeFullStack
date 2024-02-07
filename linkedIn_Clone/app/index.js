@@ -1,11 +1,10 @@
+import { Redirect } from 'expo-router'
 import React from 'react'
 import { StyleSheet, Text } from 'react-native'
 
 const index = () => {
   return (
-    <Text>
-      Hello LinkedIn
-    </Text>
+    <Redirect href="/(authenticate)/login" />
   )
 }
 
