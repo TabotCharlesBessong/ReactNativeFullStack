@@ -1,10 +1,12 @@
 const Router = require("express")
-const { register, verify, login } = require("../controllers/user.controller")
+const { register, verify, login, getUser, getConnections } = require("../controllers/user.controller")
 
 const router = Router()
 
 router.post("/register",register)
-router.post("/verify/:token",verify)
+router.get("/verify/:token",verify)
 router.post("/login",login)
+router.get("/profile/:userId",getUser)
+router.get("/users/:userId",getConnections)
 
 module.exports = router
