@@ -90,4 +90,42 @@ const login = async (req,res) => {
   }
 }
 
-module.exports = {register,verify,login}
+const getUser = async (req,res) => {
+  try {
+    const userId = req.params.userId
+    const user = await User.findById(userId)
+    if(!user){
+      return res.status(404).json({message:"User not found"})
+    }
+    res.status(200).json({user})
+  } catch (error) {
+    res.status(500).json({message:"Error retrieving user profile"})
+  }
+}
+
+const getConnections = async (req,res) => {
+  try {
+    const loggedInUserId = req.params.userId
+
+    // fetch the loggedin user connections
+    const loggedInUser = await User.findById(loggedInUserId).populate("connections","_id")
+    if(!loggedInUser){
+      return res.status(400).json({message:"User not found"})
+    }
+
+    // get the IDs of the connected users
+    const connectedUsersIds = loggedInUser.connections.map((connection) => connection._id)
+
+    // find the users who are not connected to the loggedin user id
+    const users = await User.find({
+      _id:{$ne:loggedInUserId,$nin:connectedUsersIds}
+    })
+
+    res.status(200).json({users,connectedUsersIds})
+  } catch (error) {
+    console.log("Error retrieving users: ", error)
+    res.status(500).json({ message: "Error retrieving users" });
+  }
+}
+
+module.exports = {register,verify,login,getUser,getConnections}
