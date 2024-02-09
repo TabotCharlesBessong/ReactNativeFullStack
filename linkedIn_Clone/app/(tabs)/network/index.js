@@ -4,8 +4,16 @@ import axios from "axios";
 import { useRouter } from "expo-router";
 import { jwtDecode } from "jwt-decode";
 import React, { useEffect, useState } from "react";
-import { FlatList, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
-import { UserProfile } from "../../../components";
+import {
+  FlatList,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import ConnectionRequest from "../../../components/ConnectionsRequest";
+import UserProfile from "../../../components/UserProfile";
 
 const index = () => {
   const [userId, setUserId] = useState("");
@@ -13,7 +21,6 @@ const index = () => {
   const [users, setUsers] = useState([]);
   const router = useRouter();
   const [connectionRequests, setConnectionRequests] = useState([]);
-
   useEffect(() => {
     const fetchUser = async () => {
       const token = await AsyncStorage.getItem("authToken");
@@ -21,21 +28,14 @@ const index = () => {
       const userId = decodedToken.userId;
       setUserId(userId);
     };
+
     fetchUser();
   }, []);
-
   useEffect(() => {
     if (userId) {
       fetchUserProfile();
     }
   }, [userId]);
-
-  useEffect(() => {
-    if (userId) {
-      fetchUsers();
-    }
-  }, [userId]);
-
   const fetchUserProfile = async () => {
     try {
       const response = await axios.get(
@@ -43,12 +43,15 @@ const index = () => {
       );
       const userData = response.data.user;
       setUser(userData);
-      console.log(userData);
     } catch (error) {
-      console.log("Error fetching the user profile", error);
+      console.log("error fetching user profile", error);
     }
   };
-
+  useEffect(() => {
+    if (userId) {
+      fetchUsers();
+    }
+  }, [userId]);
   const fetchUsers = async () => {
     axios
       .get(`http://localhost:5000/auth/users/${userId}`)
@@ -59,9 +62,33 @@ const index = () => {
         console.log(error);
       });
   };
-  console.log({ userId });
+  useEffect(() => {
+    if (userId) {
+      fetchFriendRequests();
+    }
+  }, [userId]);
+  const fetchFriendRequests = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/connection/request/${userId}`
+      );
+      if (response.status === 200) {
+        const connectionRequestsData = response.data?.map((friendRequest) => ({
+          _id: friendRequest._id,
+          name: friendRequest.name,
+          email: friendRequest.email,
+          image: friendRequest.profileImage,
+        }));
+
+        setConnectionRequests(connectionRequestsData);
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+  console.log(connectionRequests);
   return (
-    <ScrollView>
+    <ScrollView style={{ flex: 1, backgroundColor: "white" }}>
       <Pressable
         onPress={() => router.push("/network/connections")}
         style={{
@@ -75,8 +102,9 @@ const index = () => {
         <Text style={{ fontSize: 16, fontWeight: "600" }}>
           Manage My Network
         </Text>
-        <AntDesign name="arrowright" size={24} color="black" />
+        <AntDesign name="arrowright" size={22} color="black" />
       </Pressable>
+
       <View
         style={{ borderColor: "#E0E0E0", borderWidth: 2, marginVertical: 10 }}
       />
@@ -91,12 +119,25 @@ const index = () => {
         }}
       >
         <Text style={{ fontSize: 16, fontWeight: "600" }}>Invitations (0)</Text>
-        <AntDesign name="arrowright" size={24} color="black" />
+        <AntDesign name="arrowright" size={22} color="black" />
       </View>
 
       <View
         style={{ borderColor: "#E0E0E0", borderWidth: 2, marginVertical: 10 }}
       />
+
+      <View>
+        {connectionRequests?.map((item, index) => (
+          <ConnectionRequest
+            item={item}
+            key={index}
+            connectionRequests={connectionRequests}
+            setConnectionRequests={setConnectionRequests}
+            userId={userId}
+          />
+        ))}
+      </View>
+
       <View style={{ marginHorizontal: 15 }}>
         <View
           style={{
