@@ -5,6 +5,7 @@ const cors = require("cors");
 const moment = require("moment");
 const dotenv = require("dotenv");
 const userRouter = require("./routers/user.router")
+const connectionRouter = require("./routers/connection.router")
 
 const app = express();
 const port = 5000 || process.env.PORT;
@@ -16,6 +17,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use("/auth",userRouter)
+app.use("/connection",connectionRouter)
 
 mongoose
   .connect(process.env.MONGO_URI)
