@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken"
 
 export const signup: RequestHandler = async (req: Request, res: Response) => {
   try {
-    const { email, name, password } = req.body;
+    const { email, name, password, role } = req.body;
 
     const existingUser = await UserModel.findOne({ email });
     if (existingUser)
@@ -12,7 +12,7 @@ export const signup: RequestHandler = async (req: Request, res: Response) => {
         .status(403)
         .json({ error: "The email address already exist!" });
 
-    const user = await UserModel.create({ email, password, name });
+    const user = await UserModel.create({ email, password, name, role });
     console.log(user);
     res.status(201).json({ success: true, user });
   } catch (error) {
@@ -35,3 +35,11 @@ export const signin: RequestHandler = async (req: Request, res: Response) => {
 
   res.json({ success: true, user,token });
 };
+
+export const privateResponse:RequestHandler = async (req:Request,res:Response) => {
+  res.json({message:"Cool you are in the private route!"})
+}
+
+export const adminResponse:RequestHandler = async (req:Request,res:Response) => {
+  res.json({message:"Cool you are in the padmin route!"})
+}
