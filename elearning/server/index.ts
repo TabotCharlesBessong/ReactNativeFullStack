@@ -3,6 +3,7 @@ import cors from "cors"
 import cookieParser from "cookie-parser"
 import connectDB from "./utils/db"
 import rateLimit from "express-rate-limit"
+import userRouter from "./routes/user.router"
 // import { redis } from "./utils/redis"
 
 const app = express()
@@ -28,6 +29,9 @@ app.get("/test",(req:Request,res:Response,next:NextFunction) => {
     email:"charles@gmail.com"
   })
 })
+
+// routes
+app.use("/api/user",userRouter)
 
 app.all("*",(req:Request,res:Response) => {
   const err = new Error("Request failed")
