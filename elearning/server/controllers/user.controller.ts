@@ -7,6 +7,7 @@ import ErrorHandler from "../utils/ErrorHandler";
 import path from "path";
 import sendMail from "../utils/sendMail";
 import { sendToken } from "../utils/jwt";
+import { redis } from "../utils/redis";
 
 interface IRegistrationBody {
   name: string;
@@ -152,3 +153,20 @@ export const loginUser = CatchAsyncError(
     }
   }
 );
+
+export const logoutUser = CatchAsyncError(
+  async (req:Request,res:Response,next:NextFunction) => {
+    try {
+      res.cookie("access_token","",{maxAge:1})
+      res.cookie("refresh_token","",{maxAge:1})
+      // const userId = "";
+      // redis.del(userId)
+      res.status(200).json({
+        success:true,
+        message:"Logout successfully"
+      })
+    } catch (error:any) {
+      return next(new ErrorHandler(error.message,400))
+    }
+  }
+)
