@@ -1,5 +1,5 @@
 import ejs from "ejs";
-import jwt, { Secret } from "jsonwebtoken";
+import jwt, { JwtPayload, Secret } from "jsonwebtoken";
 import { NextFunction, Request, Response } from "express";
 import { CatchAsyncError } from "../middleware/catchAsyncErrors";
 import userModel, { IUser } from "../models/user.model";
@@ -168,5 +168,38 @@ export const logoutUser = CatchAsyncError(
     } catch (error:any) {
       return next(new ErrorHandler(error.message,400))
     }
+  }
+)
+
+// update access token 
+export const updateAccessToken = CatchAsyncError(
+  async (req:Request,res:Response,next:NextFunction) => {
+    try {
+      const refresh_token = req.headers["refresh-token"] as string;
+      const decoded = jwt.verify(
+        refresh_token,
+        process.env.REFRESH_TOKEN as string
+      ) as JwtPayload;
+
+      const message = "Could not refresh token";
+      if (!decoded) return next(new ErrorHandler(message, 400));
+
+      // const session = await redis.get(decoded.id as string);
+      // if (!session)
+      //   return next(
+      //     new ErrorHandler("Please login for access to this resource", 400)
+      //   );
+
+      // const user = JSON.parse(session);
+
+      // req.user = user;
+
+      // await redis.set(user._id, JSON.stringify(user), "EX", 604800); // 7days
+
+      return next();
+    } catch (error:any) {
+      return next(new ErrorHandler(error.message, 400));
+    }
+    
   }
 )
