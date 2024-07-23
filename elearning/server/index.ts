@@ -49,7 +49,7 @@ const Boostrap = async function () {
   try {
     await connectDB()
     app.listen(port, () => {
-      console.log("Connection has been established successfully on port.");
+      console.log(`Connection has been established successfully on port number ${port} .`);
     });
   } catch (error) {
     console.error("Unable to connect to the database:", error);
